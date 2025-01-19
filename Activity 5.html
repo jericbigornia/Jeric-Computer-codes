@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Square Numbers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-weight: bold; /* Set all text to bold */
+            font-size:large
+        }
+        h1 {
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        // JavaScript expression to calculate the square of a number
+        function calculateSquare(number) {
+            return number * number;
+        }
+
+        // Get the result and update the document
+        window.onload = function() {
+            var baseNumber = 18;
+            var squareResult = calculateSquare(baseNumber);
+
+            // Update the document with the calculated square
+            document.getElementById('result').innerHTML = "The square of the number " + baseNumber + " is " + squareResult;
+        };
+    </script>
+</head>
+<body>
+
+    <h1>Square Numbers</h1>
+
+    <p id="result"></p>
+
+</body>
+</html>

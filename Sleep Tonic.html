@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Tonic</title>
+</head>
+<body>
+
+<script>
+    // Show a confirm dialog with the message "Are you sleepy?"
+    var userConfirmed = confirm("Are you sleepy?");
+
+    // Check the user's response
+    if (userConfirmed) {
+        // If the user clicked OK, display "Sleeping beauty" in a message box
+        alert("Sleeping beauty");
+    } else {
+        // If the user clicked Cancel, display a different message on the page
+        document.write("<h3>Maybe next time! Sweet dreams anyway!</h3>");
+    }
+
+    // The Sleeping Tonic paragraph
+    document.write(`
+        <p>
+            Babie sleep the most, old people the least. During sleep, our bodies produce a growth hormone, 
+            this only happens during our deepest slumber. The hormone repairs our bodies and in childhood, 
+            helps us to grow. The more we sleep, the more we can sort out our heads. This is because plenty 
+            of sleep-and therefore plenty of dreams-helps us to work out conscious and unconscious problems. 
+            So if you want to be tall and cool, get sleeping.
+        </p>
+    `);
+</script>
+
+</body>
+</html>

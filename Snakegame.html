@@ -1,0 +1,221 @@
+<html>
+<head>
+    <title></title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            border: 1px solid white;
+        }
+
+        #score {
+            color: white;
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #game-over {
+            display: none;
+            color: red;
+            font-size: 36px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: <span id="score-value">0</span></div>
+    <div id="game-over">Game Over! Press Space to Restart</div>
+    <canvas width="400" height="400" id="game"></canvas>
+    <script>
+        var canvas = document.getElementById("game");
+        var context = canvas.getContext("2d");
+
+        var grid = 16;
+        var frameRate = 15; // Adjust this value for the desired snake speed (lower is slower)
+        var score = 0;
+        var gameRunning = true; // Variable to track game state
+        var snake = {
+            x: 160,
+            y: 160,
+            dx: grid,
+            dy: 0,
+            cells: [],
+            maxCells: 4
+        };
+        var apple = {
+            x: 320,
+            y: 320
+        };
+
+        // get random whole numbers in a specific range
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        // game loop
+        function loop() {
+            if (gameRunning) {
+                requestAnimationFrame(loop);
+
+                // slow down the game loop for a slower snake
+                if (++frameRate < 15) {
+                    return;
+                }
+
+                frameRate = 0;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // move the snake by its velocity
+                snake.x += snake.dx;
+                snake.y += snake.dy;
+
+                // wrap snake position horizontally on the edge of the screen
+                if (snake.x >= canvas.width) {
+                    snake.x = 0;
+                } else if (snake.x < 0) {
+                    snake.x = canvas.width - grid;
+                }
+
+                // wrap snake position vertically on the edge of the screen
+                if (snake.y >= canvas.height) {
+                    snake.y = 0;
+                } else if (snake.y < 0) {
+                    snake.y = canvas.height - grid;
+                }
+
+                // keep track of where the snake has been. front of the array is always the head
+                snake.cells.unshift({ x: snake.x, y: snake.y });
+
+                // remove cells as we move away from them
+                if (snake.cells.length > snake.maxCells) {
+                    snake.cells.pop();
+                }
+
+                // draw apple
+                context.fillStyle = 'red';
+                context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+                // draw snake one cell at a time
+                context.fillStyle = 'green';
+                snake.cells.forEach(function (cell, index) {
+                    // drawing 1 px smaller than the grid creates a grid effect in the snake body
+                    context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+                    // check collision with apple
+                    if (cell.x === apple.x && cell.y === apple.y) {
+                        snake.maxCells++;
+
+                        // increase the score
+                        score += 10;
+                        document.getElementById("score-value").innerText = score;
+
+                        // place a new apple in a random position
+                        apple.x = getRandomInt(0, 25) * grid;
+                        apple.y = getRandomInt(0, 25) * grid;
+                    }
+
+                    // check collision with all cells after this one (modified bubble sort)
+                    for (var i = index + 1; i < snake.cells.length; i++) {
+                        // snake occupies the same space as a body part, game over
+                        if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                            showGameOver();
+                            gameRunning = false; // Set game state to false
+                            return;
+                        }
+                    }
+                });
+            }
+        }
+
+        function showGameOver() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById("game-over").style.display = "block";
+        }
+
+        // listen to restart button click
+        document.addEventListener('keydown', function (e) {
+            // restart the game on spacebar press
+            if (e.which === 32 && !gameRunning) {
+                restartGame();
+            }
+        });
+
+        // restart the game
+        function restartGame() {
+            // reset variables
+            score = 0;
+            gameRunning = true; // Set game state to true
+            snake = {
+                x: 160,
+                y: 160,
+                dx: grid,
+                dy: 0,
+                cells: [],
+                maxCells: 4
+            };
+            apple = {
+                x: getRandomInt(0, 25) * grid,
+                y: getRandomInt(0, 25) * grid
+            };
+
+            // hide game over screen
+            document.getElementById("game-over").style.display = "none";
+
+            // reset the score display
+            document.getElementById("score-value").innerText = score;
+
+            // restart the game loop
+            loop();
+        }
+
+        // listen to keyboard events to move the snake
+        document.addEventListener('keydown', function (e) {
+            // prevent snake from backtracking on itself by checking that it's
+            // not already moving on the same axis (pressing left while moving left
+            // shouldn't let you collide with your own body)
+            // left arrow key
+            if (e.which === 37 && snake.dx === 0) {
+                snake.dx = -grid;
+                snake.dy = 0;
+            }
+            // up arrow key
+            else if (e.which === 38 && snake.dy === 0) {
+                snake.dy = -grid;
+                snake.dx = 0;
+            }
+            // right arrow key
+            else if (e.which === 39 && snake.dx === 0) {
+                snake.dx = grid;
+                snake.dy = 0;
+            }
+            // down arrow key
+            else if (e.which === 40 && snake.dy === 0) {
+                snake.dy = grid;
+                snake.dx = 0;
+            }
+        });
+
+        // start the game
+        loop();
+    </script>
+</body>
+</html>
+
+
+
+

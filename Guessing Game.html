@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guessing Game</title>
+</head>
+<body>
+    <script language="JavaScript">
+        // This script will generate a number from 1 to 10
+        // The user is asked to guess the generated number n=Math. round (Math.random() *10) + 1
+        var n = Math.round(Math.random() * 10) + 1;  // Generate a random number
+
+        var guess = prompt("Guess the number", "");
+
+        if (guess == n) {
+            document.write("<p>Congratulations!</p>");
+            document.write("<p>You have guessed the mystery number.</p>");
+        } else {
+            alert("The mystery number is " + n);
+            document.write("<p>Sorry, that is not the mystery number.</p>");
+            document.write("<p>Press the refresh button to try again.</p>");
+            document.write("<p>The computer will generate a new number.</p>");
+        }
+    </script>
+</body>
+</html>

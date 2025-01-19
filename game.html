@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title></title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="400" height="400" id="game"></canvas>
+    <script>
+        var canvas = document.getElementById('game');
+        var context = canvas.getContext('2d');
+
+        var grid = 16;
+        var count = 0;
+
+        var snake = {
+            x: 0,
+            y: 0,
+            dx: 1,
+            dy: 0,
+        };
+
+        // slow game loop to 15 fps instead of 60 (60/15 = 4)
+        if (++count < 4) {
+            return;
+        }
+
+        count = 0;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // move snake by its velocity
+        snake.x += snake.dx;
+        snake.y += snake.dy;
+
+        // wrap snake position horizontally on the edge of the screen
+        if (snake.x < 0) {
+            snake.x = canvas.width - grid;
+        } else if (snake.x >= canvas.width) {
+            snake.x = 0;
+        }
+
+        // wrap snake position vertically on the edge of the screen
+        if (snake.y < 0) {
+            snake.y = canvas.height - grid;
+        } else if (snake.y >= canvas.height) {
+            snake.y = 0;
+        }
+
+        // Rest of your game logic goes here
+
+    </script>
+</body>
+</html>
